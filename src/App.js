@@ -1,25 +1,46 @@
-import logo from './logo.svg';
+import { useCallback, useEffect, useState } from 'react';
+import { Link as ScrollLink } from 'react-scroll';
+import Navbar from './Navbar';
+import Main from './Main';
+import About from './About';
+import Contact from './Contact';
+
 import './App.css';
 
-function App() {
+const App = () => {
+  const [isArrowVisible, setIsArrowVisible] = useState(false);
+
+  const toggleArrow = useCallback(() => {
+    window.scrollY + window.innerHeight > window.innerHeight
+      ? setIsArrowVisible(true)
+      : setIsArrowVisible(false);
+  }, []);
+
+  useEffect(() => {
+    window.addEventListener('scroll', toggleArrow);
+  }, [toggleArrow]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div className='App'>
+      <div id='scrollTarget'></div>
+      <Navbar />
+      <Main />
+      <About />
+      <Contact />
+      {isArrowVisible && (
+        <ScrollLink
+          activeClass='active'
+          to='scrollTarget'
+          spy={true}
+          smooth={true}
+          offset={0}
+          duration={350}
         >
-          Learn React
-        </a>
-      </header>
+          <div className='arrow'>V</div>
+        </ScrollLink>
+      )}
     </div>
   );
-}
+};
 
 export default App;
